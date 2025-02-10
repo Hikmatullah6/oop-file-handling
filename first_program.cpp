@@ -8,22 +8,29 @@ COIS 2040 Assignment 2
 #include <iostream> // For input/output operations
 #include <fstream>  // For file handling
 
-// Function to open a file and return the input stream by reference
-void getInputStream(std::ifstream &fileIn, std::string fileName)
+// Function to open files and return the input and output stream by reference
+void getInputStream(std::ifstream &fileIn, std::ofstream &fileOut, std::string fileName)
 {
     fileIn.open(fileName);
+    fileOut.open("output.txt");
     if (!fileIn.is_open())
     {
         std::cerr << "Error opening input file!\n";
-        exit(1); // Exit if the file couldn't be open
+        exit(1); // Exit if the input file couldn't be open
+    }
+    if (!fileOut.is_open())
+    {
+        std::cerr << "Error opening output file!\n";
+        exit(1); // Exit if the output file couldn't be open
     }
 }
 
 // Main program
 int main()
 {
-    std::ifstream fileIn; // Input file stream
-    std::string fileName; // Variable to store the file name
+    std::ifstream fileIn;  // Input file stream
+    std::ofstream fileOut; // Output file stream
+    std::string fileName;  // Variable to store the file name
 
     int num, sum = 0, count = 0; // Variables to store numbers, sum, and count of numbers
 
@@ -31,7 +38,7 @@ int main()
     std::cout << "Enter input file name: ";
     std::cin >> fileName;
 
-    getInputStream(fileIn, fileName); // Call function to open file
+    getInputStream(fileIn, fileOut, fileName); // Call function to open files
 
     // ****This code below was before modification****
     //----------------------------------------------------------------------------------------------------
@@ -44,27 +51,32 @@ int main()
     //     std::cerr << "Error: failed opening the file!\n"; // Display error message if file cannot be opened
     //     return 1;                                         // Exit program with error status
     // }
+
+    // // Display table headers
+    // std::cout << "Number\tSquare\tSum\n";
     //----------------------------------------------------------------------------------------------------
 
-    // Display table headers
-    std::cout << "Number\tSquare\tSum\n";
+    fileOut << "Number\tSquare\tSum\n"; // Print title headers
 
     // Read numbers from file and process them
     while (fileIn >> num)
     {
-        sum += num;                                                     // Update cumulative sum
-        std::cout << num << "\t" << (num * num) << "\t" << sum << "\n"; // Print number, its square, and cumulative sum
-        count++;                                                        // Increment count of numbers
+        sum += num;                                                   // Update cumulative sum
+        fileOut << num << "\t" << (num * num) << "\t" << sum << "\n"; // Print number, its square, and cumulative sum
+        count++;                                                      // Increment count of numbers
     }
 
     // Calculate and display the average if at least one number was read
     if (count > 0)
     {
-        std::cout << "Average: " << (sum / static_cast<double>(count)) << "\n";
+        fileOut << "Average: " << (sum / static_cast<double>(count)) << "\n";
     }
 
-    // Close the file
+    // Close the files
     fileIn.close();
+    fileOut.close();
+
+    std::cout << "Output written in output file.\n";
 
     return 0; // Program executed successfully
 }
