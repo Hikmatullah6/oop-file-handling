@@ -8,6 +8,17 @@ COIS 2040 Assignment 2
 #include <iostream> // For input/output operations
 #include <fstream>  // For file handling
 
+// Function to open a file and return the input stream by reference
+void getInputStream(std::ifstream &fileIn, std::string fileName)
+{
+    fileIn.open(fileName);
+    if (!fileIn.is_open())
+    {
+        std::cerr << "Error opening input file!\n";
+        exit(1); // Exit if the file couldn't be open
+    }
+}
+
 // Main program
 int main()
 {
@@ -20,15 +31,20 @@ int main()
     std::cout << "Enter input file name: ";
     std::cin >> fileName;
 
-    // Open the file for reading
-    fileIn.open(fileName);
+    getInputStream(fileIn, fileName); // Call function to open file
 
-    // Check if file opened successfully
-    if (!fileIn.is_open())
-    {
-        std::cerr << "Error: failed opening the file!\n"; // Display error message if file cannot be opened
-        return 1;                                         // Exit program with error status
-    }
+    // ****This code below was before modification****
+    //----------------------------------------------------------------------------------------------------
+    // // Open the file for reading
+    // fileIn.open(fileName);
+
+    // // Check if file opened successfully
+    // if (!fileIn.is_open())
+    // {
+    //     std::cerr << "Error: failed opening the file!\n"; // Display error message if file cannot be opened
+    //     return 1;                                         // Exit program with error status
+    // }
+    //----------------------------------------------------------------------------------------------------
 
     // Display table headers
     std::cout << "Number\tSquare\tSum\n";
